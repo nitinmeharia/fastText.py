@@ -39,33 +39,33 @@ class WordVectorModel(object):
 class SupervisedModel(object):
     def __init__(self, model, labels, label_prefix, encoding='utf-8'):
         self._model = model
-        self.labels = labels
-        self.dim = model.dim
-        self.ws = model.ws
-        self.epoch = model.epoch
-        self.min_count = model.minCount
-        self.neg = model.neg
-        self.word_ngrams = model.wordNgrams
-        self.loss_name = model.lossName.decode(encoding)
-        self.model_name = model.modelName.decode(encoding)
         self.bucket = model.bucket
-        self.minn = model.minn
-        self.maxn = model.maxn
-        self.lr_update_rate = model.lrUpdateRate
-        self.t = model.t
-        self.label_prefix = label_prefix
+        self.dim = model.dim
         self.encoding = encoding
+        self.epoch = model.epoch
+        self.label_prefix = label_prefix
+        self.labels = labels
+        self.loss_name = model.lossName.decode(encoding)
+        self.lr_update_rate = model.lrUpdateRate
+        self.maxn = model.maxn
+        self.min_count = model.minCount
+        self.minn = model.minn
+        self.model_name = model.modelName.decode(encoding)
+        self.neg = model.neg
+        self.t = model.t
+        self.word_ngrams = model.wordNgrams
+        self.ws = model.ws
 
     def test(self, test_file, k=1):
-        return self._model.classifier_test(test_file, k, self.encoding)
+        return self._model.test(test_file, k, self.encoding)
 
     def predict(self, texts, k=1):
         all_labels = []
         for text in texts:
             if text[-1] != '\n':
                 text += '\n'
-            labels = self._model.classifier_predict(text, k,
-                    self.label_prefix, self.encoding)
+            labels = self._model.predict(text, k,
+                        self.label_prefix, self.encoding)
             all_labels.append(labels)
         return all_labels
 
@@ -74,13 +74,13 @@ class SupervisedModel(object):
         for text in texts:
             if text[-1] != '\n':
                 text += '\n'
-            result = self._model.classifier_predict_prob(text, k,
+            result = self._model.predict_prob(text, k,
                     self.label_prefix, self.encoding)
             results.append(result)
         return results
 
 # Class for test result
-class ClassifierTestResult(object):
+class SupervisedTestResult(object):
     def __init__(self, precision, recall, nexamples):
         self.precision = precision
         self.recall = recall

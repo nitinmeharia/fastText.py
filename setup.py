@@ -10,28 +10,34 @@ if platform == "darwin":
 else:
     extra_compile_args = ['-O3', '-pthread', '-funroll-loops', '-std=c++0x']
 
+# https://docs.python.org/2/distutils/apiref.html#distutils.core.Extension
 extensions = [
-    Extension('*',
+    Extension(
+        name='fasttext.fasttext',
         sources=[
             'fasttext/fasttext.pyx',
+            'fasttext/interface.pxd',
             'fasttext/interface.cc',
             'fasttext/cpp/src/args.cc',
             'fasttext/cpp/src/dictionary.cc',
+            'fasttext/cpp/src/fasttext.cc',
+            'fasttext/cpp/src/main.cc',
             'fasttext/cpp/src/matrix.cc',
             'fasttext/cpp/src/model.cc',
+            'fasttext/cpp/src/productquantizer.cc',
+            'fasttext/cpp/src/qmatrix.cc',
             'fasttext/cpp/src/utils.cc',
-            'fasttext/cpp/src/fasttext.cc',
-            'fasttext/cpp/src/vector.cc',
-            'fasttext/cpp/src/main.cc'
+            'fasttext/cpp/src/vector.cc'
         ],
         language='c++',
-        extra_compile_args=extra_compile_args)
+        extra_compile_args=extra_compile_args,
+        include_dirs=['fasttext', 'fasttext/cpp'])
 ]
 
 # Package details
 setup(
     name='fasttext',
-    version='0.8.3',
+    version='0.9.0',
     author='Bayu Aldi Yansyah',
     author_email='bayualdiyansyah@gmail.com',
     url='https://github.com/pyk/fastText.py',
